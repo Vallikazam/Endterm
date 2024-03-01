@@ -6,7 +6,8 @@ class ManageTask {
     public ManageTask(){
         allTasks = new ArrayList<>();
     }
-    public void addTask(Task task){
+    public void addTask(Task task, int priority){
+        task.setPriority(priority);
         allTasks.add(task);
     }
     public void deleteTask(int id){
@@ -33,4 +34,5 @@ class ManageTask {
         }
         return uncompletedTasks;
     }
+
 }
