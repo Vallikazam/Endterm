@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,23 +11,28 @@ class Display{
         scanner = new Scanner(System.in);
     }
     public void menu(){
+        System.out.println("\t*** Menu ***");
         System.out.println("1. Add task");
         System.out.println("2. Show all tasks");
         System.out.println("3. Show completed tasks");
         System.out.println("4. Show uncompleted tasks");
-        System.out.println("5. Complete task");
-        System.out.println("6. Remove task");
-        System.out.println("7. Exit");
+        System.out.println("5. Show priority tasks");
+        System.out.println("6. Complete task");
+        System.out.println("7. Remove task");
+        System.out.println("8. Exit");
     }
     private void addTask(){
         System.out.println("Enter name of task: ");
         String name = scanner.nextLine();
+        System.out.println("Enter priority for task(1-3): ");
+        int priority = scanner.nextInt();
+        scanner.nextLine();
         System.out.println("Enter deadline of task: ");
         String deadline = scanner.nextLine();
         System.out.println("Enter description for task: ");
         String description = scanner.nextLine();
-        Task task = new Task(name, deadline, description, false);
-        manageTask.addTask(task);
+        Task task = new Task(name, deadline, description, false, priority);
+        manageTask.addTask(task, priority);
         System.out.println("\tTask added!");
     }
     private void showAllTasks(){
@@ -43,7 +49,7 @@ class Display{
     private void showCompletedTasks(){
         List<Task> completedTasks = manageTask.getCompletedTasks();
         if (completedTasks.isEmpty()){
-            System.out.println("\nThere is no tasks!");
+            System.out.println("\nThere is no completed tasks!");
         }else{
             System.out.println("\nAll completed tasks: ");
             for (int i = 0; i < completedTasks.size(); i++){
@@ -54,11 +60,32 @@ class Display{
     private void showUncompletedTasks(){
         List<Task> uncompletedTasks = manageTask.getUncompletedTasks();
         if (uncompletedTasks.isEmpty()){
-            System.out.println("\nThere is no tasks!");
+            System.out.println("\nThere is no uncompleted tasks!");
         }else{
             System.out.println("\nAll uncompleted tasks");
             for (int i = 0; i < uncompletedTasks.size(); i++){
                 System.out.println("\n" + (i+1) + ". " + uncompletedTasks.get(i));
+            }
+        }
+    }
+    private List<Task> getPriorityTasks(int priority){
+        List<Task> priorityTasks = new ArrayList<>();
+        for (Task task : manageTask.getAllTasks()){
+            if (task.getPriority() == priority){
+                priorityTasks.add(task);
+            }
+        }
+        return priorityTasks;
+    }
+    private void showPriorityTasks(){
+        System.out.println("Priority tasks: ");
+        for (int priority = 1; priority <= 3; priority++){
+            List<Task> tasks = getPriorityTasks(priority);
+            if (!tasks.isEmpty()){
+                System.out.println("Priority " + priority + ":");
+                for (int i = 0; i < tasks.size(); i++){
+                    System.out.println((i+1) + ". " + tasks.get(i));
+                }
             }
         }
     }
@@ -109,17 +136,20 @@ class Display{
                     showUncompletedTasks();
                     break;
                 case 5:
-                    updateTask();
+                    showPriorityTasks();
                     break;
                 case 6:
-                    deleteTask();
+                    updateTask();
                     break;
                 case 7:
+                    deleteTask();
+                    break;
+                case 8:
                     System.out.println("\n\t\tSee you later!");
                     break;
                 default:
                     System.out.println("Invalid choice. \n\tTry again!\n");
             }
-        }while(choice != 7);
+        }while(choice != 8);
     }
 }
