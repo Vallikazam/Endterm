@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-class Display{
+public class Display implements TaskAddition, TaskDisplay, TaskUpdate {
     private ManageTask manageTask;
     private Scanner scanner;
 
@@ -10,18 +10,9 @@ class Display{
         this.manageTask = manageTask;
         scanner = new Scanner(System.in);
     }
-    public void menu(){
-        System.out.println("\t*** Menu ***");
-        System.out.println("1. Add task");
-        System.out.println("2. Show all tasks");
-        System.out.println("3. Show completed tasks");
-        System.out.println("4. Show uncompleted tasks");
-        System.out.println("5. Show priority tasks");
-        System.out.println("6. Complete task");
-        System.out.println("7. Remove task");
-        System.out.println("8. Exit");
-    }
-    private void addTask(){
+
+    @Override
+    public void addTask() {
         System.out.println("Enter name of task: ");
         String name = scanner.nextLine();
         System.out.println("Enter priority for task(1-3): ");
@@ -35,10 +26,12 @@ class Display{
         manageTask.addTask(task, priority);
         System.out.println("\tTask added!");
     }
-    private void showAllTasks(){
+
+    @Override
+    public void showAllTasks() {
         List<Task> tasks = manageTask.getAllTasks();
         if (tasks.isEmpty()){
-            System.out.println("\nThere is no tasks!");
+            System.out.println("\nThere are no tasks!");
         }else{
             System.out.println("\nAll tasks: ");
             for (int i = 0; i < tasks.size(); i++){
@@ -46,10 +39,12 @@ class Display{
             }
         }
     }
-    private void showCompletedTasks(){
+
+    @Override
+    public void showCompletedTasks() {
         List<Task> completedTasks = manageTask.getCompletedTasks();
         if (completedTasks.isEmpty()){
-            System.out.println("\nThere is no completed tasks!");
+            System.out.println("\nThere are no completed tasks!");
         }else{
             System.out.println("\nAll completed tasks: ");
             for (int i = 0; i < completedTasks.size(); i++){
@@ -57,27 +52,22 @@ class Display{
             }
         }
     }
-    private void showUncompletedTasks(){
+
+    @Override
+    public void showUncompletedTasks() {
         List<Task> uncompletedTasks = manageTask.getUncompletedTasks();
         if (uncompletedTasks.isEmpty()){
-            System.out.println("\nThere is no uncompleted tasks!");
+            System.out.println("\nThere are no uncompleted tasks!");
         }else{
-            System.out.println("\nAll uncompleted tasks");
+            System.out.println("\nAll uncompleted tasks: ");
             for (int i = 0; i < uncompletedTasks.size(); i++){
                 System.out.println("\n" + (i+1) + ". " + uncompletedTasks.get(i));
             }
         }
     }
-    private List<Task> getPriorityTasks(int priority){
-        List<Task> priorityTasks = new ArrayList<>();
-        for (Task task : manageTask.getAllTasks()){
-            if (task.getPriority() == priority){
-                priorityTasks.add(task);
-            }
-        }
-        return priorityTasks;
-    }
-    private void showPriorityTasks(){
+
+    @Override
+    public void showPriorityTasks() {
         System.out.println("Priority tasks: ");
         for (int priority = 1; priority <= 3; priority++){
             List<Task> tasks = getPriorityTasks(priority);
@@ -89,7 +79,19 @@ class Display{
             }
         }
     }
-    private void updateTask(){
+
+    private List<Task> getPriorityTasks(int priority){
+        List<Task> priorityTasks = new ArrayList<>();
+        for (Task task : manageTask.getAllTasks()){
+            if (task.getPriority() == priority){
+                priorityTasks.add(task);
+            }
+        }
+        return priorityTasks;
+    }
+
+    @Override
+    public void updateTask() {
         System.out.println("Enter task id that you completed: ");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -102,7 +104,9 @@ class Display{
             System.out.println("Entered ID is wrong!");
         }
     }
-    private void deleteTask(){
+
+    @Override
+    public void deleteTask() {
         System.out.println("Enter task id that you want to delete: ");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -115,7 +119,7 @@ class Display{
             System.out.println("Entered ID is wrong!");
         }
     }
-    public void start(){
+    public void start() {
         int choice;
         do {
             menu();
@@ -152,4 +156,31 @@ class Display{
             }
         }while(choice != 8);
     }
+    private void menu() {
+        System.out.println("\t*** Menu ***");
+        System.out.println("1. Add task");
+        System.out.println("2. Show all tasks");
+        System.out.println("3. Show completed tasks");
+        System.out.println("4. Show uncompleted tasks");
+        System.out.println("5. Show priority tasks");
+        System.out.println("6. Complete task");
+        System.out.println("7. Remove task");
+        System.out.println("8. Exit");
+    }
+}
+
+interface TaskAddition {
+    void addTask();
+}
+
+interface TaskDisplay {
+    void showAllTasks();
+    void showCompletedTasks();
+    void showUncompletedTasks();
+    void showPriorityTasks();
+}
+
+interface TaskUpdate {
+    void updateTask();
+    void deleteTask();
 }
