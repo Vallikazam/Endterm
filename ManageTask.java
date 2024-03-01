@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class ManageTask {
+public class ManageTask {
     private List<Task> allTasks;
     public ManageTask(){
         allTasks = new ArrayList<>();
@@ -34,5 +34,4 @@ class ManageTask {
         }
         return uncompletedTasks;
     }
-
 }
