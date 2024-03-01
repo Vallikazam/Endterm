@@ -1,4 +1,4 @@
-class Task {
+public class Task {
     private String name;
     private String description;
     private String deadline;
@@ -40,4 +40,3 @@ class Task {
         }
     }
 }
-
